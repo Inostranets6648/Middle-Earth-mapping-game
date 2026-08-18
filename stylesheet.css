@@ -1,0 +1,313 @@
+:root {
+    --bg-color: #1a1815;
+    --panel-bg: #2a241e;
+    --accent-color: #d4af37;
+    --text-color: #e6dfd5;
+    --border-color: #4a3e31;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.top-bar {
+    height: 60px;
+    background-color: var(--panel-bg);
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.target-prompt {
+    font-size: 1.2rem;
+}
+
+.target-prompt span {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.main-window {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: rgba(42, 36, 30, 0.85);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+}
+
+.sidebar-left {
+    border-right: 2px solid var(--border-color);
+}
+
+.sidebar-right {
+    border-left: 2px solid var(--border-color);
+}
+
+.map-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    background: #121110;
+    overflow: hidden;
+    position: relative;
+}
+
+.map-container svg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
+}
+
+/* Базовый стиль контуров карты */
+.map-container svg path,
+.map-container svg polygon {
+    stroke: #ffffff;
+    stroke-width: 0.5;
+    fill: #a6a6a6;
+    pointer-events: all;
+    transition: fill 0.2s ease;
+}
+
+/* Курсор указателя для всех интерактивных регионов */
+.map-container svg .game-region,
+.map-container svg .game-region path,
+.map-container svg .game-region polygon {
+    cursor: pointer !important;
+}
+
+/* Наведение: работает и для отдельных path, и для групп */
+.map-container svg path.game-region:not(.guessed-first):not(.guessed-second):not(.guessed-third):not(.revealed-failed):not(.wrong-flash):hover,
+.map-container svg g.game-region:not(.guessed-first):not(.guessed-second):not(.guessed-third):not(.revealed-failed):not(.wrong-flash):hover path {
+    fill: #d4af37 !important;
+}
+
+/* 1-я попытка: Зеленый */
+.map-container svg .guessed-first,
+.map-container svg .guessed-first path,
+.map-container svg .guessed-first polygon {
+    fill: #2ecc71 !important;
+}
+
+/* 2-я попытка: Желтый */
+.map-container svg .guessed-second,
+.map-container svg .guessed-second path,
+.map-container svg .guessed-second polygon {
+    fill: #f1c40f !important;
+}
+
+/* 3-я попытка: Оранжевый */
+.map-container svg .guessed-third,
+.map-container svg .guessed-third path,
+.map-container svg .guessed-third polygon {
+    fill: #e67e22 !important;
+}
+
+/* Короткая вспышка ошибки при неверном клике */
+.map-container svg .wrong-flash,
+.map-container svg .wrong-flash path,
+.map-container svg .wrong-flash polygon {
+    fill: #e74c3c !important;
+    animation: wrongFlashAnim 0.4s ease-out;
+}
+
+@keyframes wrongFlashAnim {
+    0%, 50% { fill: #e74c3c !important; }
+    100% { fill: #a6a6a6; }
+}
+
+/* Длинное мигание неразгаданного региона */
+.map-container svg .revealed-failed,
+.map-container svg .revealed-failed path,
+.map-container svg .revealed-failed polygon {
+    fill: #e74c3c !important;
+    animation: failBlinkAnim 2.4s ease-in-out;
+}
+
+@keyframes failBlinkAnim {
+    0%, 100% { fill: #e74c3c !important; opacity: 1; }
+    15%, 45%, 75% { fill: #ffffff !important; opacity: 0.4; }
+    30%, 60%, 90% { fill: #e74c3c !important; opacity: 1; }
+}
+
+/* Тряска плашки попыток */
+.shake {
+    animation: shakeAnim 0.3s ease-in-out;
+}
+
+@keyframes shakeAnim {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+.bottom-bar {
+    height: 35px;
+    background-color: var(--panel-bg);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 35px;
+    color: #a09585;
+}
+
+.icon-btn {
+    background-color: var(--panel-bg);
+    color: var(--accent-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: var(--border-color);
+}
+
+.found-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.found-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.found-list li.success { color: #2ecc71; }
+.found-list li.failed { color: #e74c3c; }
+
+/* Модальное окно */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: #231e19;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 30px 40px;
+    text-align: center;
+    max-width: 380px;
+}
+
+.modal-title {
+    color: var(--accent-color);
+    margin-top: 0;
+    font-size: 1.6rem;
+}
+
+.modal-subtitle {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.modal-score {
+    margin: 20px 0;
+    font-size: 1.4rem;
+}
+
+.modal-score .score-value {
+    color: #2ecc71;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.modal-btn {
+    background: var(--accent-color);
+    color: #1a1815;
+    border: none;
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.15s, background-color 0.2s;
+}
+
+.modal-btn:hover {
+    background: #f1c40f;
+    transform: scale(1.04);
+}
+
+/* Оформление карточки региона */
+.region-card {
+    line-height: 1.4;
+    font-size: 0.9rem;
+}
+
+.region-info-content .card-title {
+    color: var(--accent-color);
+    font-size: 1.15rem;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.card-line {
+    margin: 6px 0;
+}
+
+.card-line strong {
+    color: #c4b69d;
+}
+
+.card-line span {
+    color: var(--text-color);
+}
+
+.card-divider {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 12px 0;
+}
+
+.card-quote {
+    color: #beb4a5;
+    font-size: 0.85rem;
+    margin: 0;
+}

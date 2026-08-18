@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middle-Earth Mapper</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <header class="top-bar">
+        <div class="logo">Middle-Earth Mapper</div>
+
+        <div class="level-select-container">
+            <label for="map-select">Age:</label>
+            <select id="map-select" class="map-dropdown">
+                <option value="TA3018">3018 T. A.</option>
+                <option value="FOA100" disabled>100 F. A (Coming soon)</option>
+            </select>
+        </div>
+
+        <div class="target-prompt">
+            Find: <span id="target-country-name">Loading...</span>
+        </div>
+
+        <div class="stats-box">
+            <div class="attempts-left">Attempts: <span id="attempts-count">3/3</span></div>
+            <div class="accuracy">Accuracy: <span id="accuracy-rate">100%</span></div>
+        </div>
+
+        <div class="audio-player">
+            <button id="music-toggle-btn" class="icon-btn">▶ Music</button>
+            <audio id="bg-music" loop src="Concerning Hobbits.mp3"></audio>
+        </div>
+    </header>
+
+    <main class="main-window">
+        <aside class="sidebar sidebar-left">
+            <h3>Progress</h3>
+            <ul id="found-list" class="found-list">
+                
+            </ul>
+        </aside>
+
+        <section class="map-container" id="map-container">
+            
+        </section>
+        <aside class="sidebar sidebar-right">
+            <h3>Lore & Info</h3>
+            <div class="region-card" id="region_info">
+                <p>Click on a region or guess correctly to reveal its history, seat, and ruler.</p>
+            </div>
+        </aside>  
+    </main>
+
+    <footer class="bottom-bar">
+        <p>Middle-Earth • Third Age • J.R.R.Tolkien</p>
+    </footer>
+
+    <div id="game-over-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 class="modal-title">Journey is over!</h2>
+            <p class="modal-subtitle">You discovered all regions of Middle-Earth</p>
+            <div class="modal-score">
+                <span class="score-label">Accuracy:</span>
+                <span id="final-accuracy" class="score-value">100%</span>
+            </div>
+            <button id="restart-game-btn" class="modal-btn">Try again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
